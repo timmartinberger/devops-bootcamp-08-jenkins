@@ -56,6 +56,8 @@ pipeline { // required - must be on toplevel
     post { // Executes logic after all stages base on condition
         always {
             // Whether build failed or succeeded
+            echo 'Mailing results to DevOps team...'
+            // ...
         }
         success {
             // Only executed in case of success
