@@ -1,22 +1,69 @@
 pipeline { // required - must be on toplevel
-  agent any // required - which worker node should run the pipeline
+    agent any // required - which worker node should run the pipeline
 
-  stages { // required - where the work happens
-    stage("build") {
-      steps {
-        echo 'Building the application...'
-      }
+    parameters {
+        booleanParam(name: 'executeTests', defaultValue: true, description: '')
+        choice(name: 'deployVersion', choices: ['1.1.0', '1.2.0', '1.3.0'], description: 'Version to deploy to prod')
     }
-    stage("test") {
-      steps {
-        echo 'Testing the application...'
-      }
-    }
-    stage("deploy") {
-      steps {
-        echo 'Deploying the application to PROD...'
-      }
-    }
-  }
 
+
+    tools {
+        maven "maven-3.9"
+    }
+
+    environment {
+        NEW_VERSION = '1.3.0'
+    }
+
+    stages { // required - where the work happens
+        stage("build") {
+            steps {
+                echo "Building version ${NEW_VERSION} of the application..."
+                when {
+                    expression {
+                        BRANCH_NAME == 'dev' // Built-in variable of Jenkins
+                    }
+                }
+                steps {
+                    sh 'mvn install'
+                }
+            }
+        }
+        stage("test") {
+            steps {
+                when {
+                    expression {
+                        params.executeTests
+                    }
+                }
+                steps {
+                    echo 'Testing the application...'
+                }
+            }
+        }
+        stage("deploy") {
+            steps {
+                echo "Deploying version ${params.deployVersion} to PROD..."
+                withCredentials([
+                    usernamePassword(credentialsId: 'prod-server', usernameVariable: USER, passwordVariable: PASS)
+                ])} {
+                    echo "Using credentials ${USER} ${PASS}"
+                }
+            }
+        }
+    }
+
+    post { // Executes logic after all stages base on condition
+        always {
+            // Whether build failed or succeeded
+        }
+        success {
+            // Only executed in case of success
+            echo 'Pipeline execution successful'
+        }
+        failure {
+            // Only executedin case of failure
+            echo 'At least one step failed'
+        }
+    }
 }
