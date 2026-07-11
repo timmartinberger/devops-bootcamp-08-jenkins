@@ -17,13 +17,13 @@ pipeline { // required - must be on toplevel
 
     stages { // required - where the work happens
         stage("build") {
-            echo "Building version ${NEW_VERSION} of the application..."
             when {
                 expression {
                     BRANCH_NAME == 'dev' // Built-in variable of Jenkins
                 }
             }
             steps {
+                echo "Building version ${NEW_VERSION} of the application..."
                 sh 'mvn install'
             }
         }
