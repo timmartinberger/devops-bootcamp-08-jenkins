@@ -19,7 +19,7 @@ pipeline { // required - must be on toplevel
         stage("build") {
             when {
                 expression {
-                    BRANCH_NAME == 'dev' // Built-in variable of Jenkins
+                    env.BRANCH_NAME == 'dev' // Built-in variable of Jenkins
                 }
             }
             steps {
