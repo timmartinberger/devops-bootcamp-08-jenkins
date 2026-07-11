@@ -41,7 +41,7 @@ pipeline { // required - must be on toplevel
             steps {
                 echo "Deploying version ${params.deployVersion} to PROD..."
                 withCredentials([
-                    usernamePassword(credentialsId: 'prod-server', usernameVariable: USER, passwordVariable: PASS)
+                    usernamePassword(credentialsId: 'prod-server', usernameVariable: 'USER', passwordVariable: 'PASS')
                 ]) {
                     echo "Using credentials ${USER} ${PASS}"
                 }
