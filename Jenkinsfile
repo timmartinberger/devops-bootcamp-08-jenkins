@@ -28,15 +28,13 @@ pipeline { // required - must be on toplevel
             }
         }
         stage("test") {
+            when {
+                expression {
+                    params.executeTests
+                }
+            }
             steps {
-                when {
-                    expression {
-                        params.executeTests
-                    }
-                }
-                steps {
-                    echo 'Testing the application...'
-                }
+                echo 'Testing the application...'
             }
         }
         stage("deploy") {
