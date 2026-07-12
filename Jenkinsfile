@@ -5,7 +5,6 @@ pipeline { // required - must be on toplevel
 
     parameters {
         booleanParam(name: 'executeTests', defaultValue: true, description: '')
-        choice(name: 'deployVersion', choices: ['1.1.0', '1.2.0', '1.3.0'], description: 'Version to deploy to prod')
     }
 
 
@@ -47,12 +46,20 @@ pipeline { // required - must be on toplevel
             }
         }
         stage("deploy") {
+            input {
+                message "Select environment to deploy to"
+                ok "Done"
+                parameters {
+                    choice(name: 'envToDeploy', choices: ['DEV', 'STAGING', 'PROD'], description: '')
+                }
+            }
             steps {
                 echo "Deploying version ${params.deployVersion} to PROD..."
                 withCredentials([
                     usernamePassword(credentialsId: 'prod-server', usernameVariable: 'USER', passwordVariable: 'PASS')
                 ]) {
                     echo "Using credentials ${USER} ${PASS}"
+                    echo "Deploying to ${envToDeploy}"
                 }
             }
         }
