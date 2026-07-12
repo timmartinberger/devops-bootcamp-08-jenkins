@@ -36,7 +36,7 @@ pipeline { // required - must be on toplevel
             }
         }
         stage("test") {
-            when {
+            when { // Basic condition
                 expression {
                     params.executeTests
                 }
@@ -45,8 +45,8 @@ pipeline { // required - must be on toplevel
                 echo 'Testing the application...'
             }
         }
-        stage("deploy") {
-            input {
+        stage("deploy variant 1") {
+            input { // User input in pipeline
                 message "Select environment to deploy to"
                 ok "Done"
                 parameters {
@@ -55,10 +55,18 @@ pipeline { // required - must be on toplevel
             }
             steps {
                 echo "Deploying version ${params.deployVersion} to PROD..."
-                withCredentials([
+                withCredentials([ // Usage of credentials that were setup within Jenkins
                     usernamePassword(credentialsId: 'prod-server', usernameVariable: 'USER', passwordVariable: 'PASS')
                 ]) {
                     echo "Using credentials ${USER} ${PASS}"
+                    echo "Deploying to ${envToDeploy}"
+                }
+            }
+        }
+        stage("deploy variant 2") {
+            steps{
+                script{
+                    env.envToDeploy = input message "Select an envirnoment to deploy to", ok: "Done", parameters: [choice(name: 'envToDeploy', choices: ['DEV', 'STAGING', 'PROD'], description: '')]
                     echo "Deploying to ${envToDeploy}"
                 }
             }
