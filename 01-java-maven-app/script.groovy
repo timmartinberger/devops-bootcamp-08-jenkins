@@ -25,4 +25,4 @@ def deployApp(){
     echo 'Deploying docker image...'
 }
 
-def return this
+return this
