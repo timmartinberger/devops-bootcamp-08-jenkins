@@ -57,8 +57,10 @@ pipeline { // required - must be on toplevel
             }
         }
         stage("health check") {
-            script{
-                gv.checkServerHealth
+            steps{
+                script{
+                    gv.checkServerHealth
+                }
             }
         }
     }
