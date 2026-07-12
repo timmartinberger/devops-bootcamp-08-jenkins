@@ -12,7 +12,7 @@ pipeline {
             steps {
                 script {
                     echo 'Building the application...'
-                    sh 'mvn package'
+                    sh 'cd 01-java-maven-app && mvn package'
                 }
             }
         }
@@ -20,10 +20,11 @@ pipeline {
             steps {
                 script {
                     echo 'Building the application...'
-                    withCredentials([usernamePassword(credentialsId: 'docker.hub', userVariable: 'USER', passwordVariable: 'PASS')])
-                    sh 'docker build -t aarontimberg/demo-app:jma-2.0 .'
-                    sh 'echo $PASS | docker login -u $USER --password-stdin'
-                    sh 'docker push aarontimberg/demo-app:jma-2.0'
+                    withCredentials([usernamePassword(credentialsId: 'docker.hub', userVariable: 'USER', passwordVariable: 'PASS')]) {
+                        sh 'docker build -t aarontimberg/demo-app:jma-2.0 .'
+                        sh "echo $PASS | docker login -u $USER --password-stdin"
+                        sh 'docker push aarontimberg/demo-app:jma-2.0'
+                    }
                 }
             }
         }
