@@ -11,7 +11,9 @@ pipeline {
         stage('init') {
             steps {
                 script {
-                    gv = load "script.groovy"
+                    dir('01-java-maven-app') { // Load from 01-java-maven-app directory
+                        gv = load "script.groovy"
+                    }
                 }
             }
         }
