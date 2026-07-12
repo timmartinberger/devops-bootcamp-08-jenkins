@@ -59,7 +59,7 @@ pipeline { // required - must be on toplevel
         stage("health check") {
             steps{
                 script{
-                    gv.checkServerHealth
+                    gv.checkServerHealth()
                 }
             }
         }
