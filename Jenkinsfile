@@ -54,12 +54,11 @@ pipeline { // required - must be on toplevel
                 }
             }
             steps {
-                echo "Deploying version ${params.deployVersion} to PROD..."
                 withCredentials([ // Usage of credentials that were setup within Jenkins
                     usernamePassword(credentialsId: 'prod-server', usernameVariable: 'USER', passwordVariable: 'PASS')
                 ]) {
-                    echo "Using credentials ${USER} ${PASS}"
-                    echo "Deploying to ${envToDeploy}"
+                    echo "[Variant 1] Using credentials ${USER} ${PASS}"
+                    echo "[Variant 1] Deploying to ${envToDeploy}"
                 }
             }
         }
@@ -67,7 +66,7 @@ pipeline { // required - must be on toplevel
             steps{
                 script{
                     env.envDeploy = input message: "Select an environment to deploy to", ok: "Done", parameters: [choice(name: 'envToDeploy', choices: ['DEV', 'STAGING', 'PROD'], description: '')]
-                    echo "Deploying to ${envDeploy}"
+                    echo "[Variant 2] Deploying to ${envDeploy}"
                 }
             }
         }
