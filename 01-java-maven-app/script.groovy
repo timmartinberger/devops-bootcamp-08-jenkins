@@ -6,6 +6,9 @@
  *      so that this would not be necessary.
  */
 
+def testApp() {
+    echo "Testing the application..."
+}
 
 def buildJar() {
     echo 'Building the application...'

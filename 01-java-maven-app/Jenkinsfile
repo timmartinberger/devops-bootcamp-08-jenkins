@@ -11,13 +11,26 @@ pipeline {
         stage('init') {
             steps {
                 script {
+                    echo "Executing pipeline for $BRANCH_NAME"
                     dir('01-java-maven-app') { // Load from 01-java-maven-app directory
                         gv = load "script.groovy"
                     }
                 }
             }
         }
+        stage('test') {
+            steps {
+                script {
+                    gv.testApp()
+                }
+            }
+        }
         stage('Build jar') {
+            when {
+                expression {
+                    BRANCH_NAME == "main"
+                }
+            }
             steps {
                 script {
                     gv.buildJar()
