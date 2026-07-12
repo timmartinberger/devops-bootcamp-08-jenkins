@@ -1,3 +1,5 @@
+def gv
+
 pipeline { // required - must be on toplevel
     agent any // required - which worker node should run the pipeline
 
@@ -16,6 +18,13 @@ pipeline { // required - must be on toplevel
     }
 
     stages { // required - where the work happens
+        stage("init") {
+            steps {
+                script {
+                    gv = load "healthCheck.groovy"
+                }
+            }
+        }
         stage("build") {
             when {
                 expression {
@@ -45,6 +54,11 @@ pipeline { // required - must be on toplevel
                 ]) {
                     echo "Using credentials ${USER} ${PASS}"
                 }
+            }
+        }
+        stage("health check") {
+            script{
+                gv.checkServerHealth
             }
         }
     }
