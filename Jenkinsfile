@@ -66,8 +66,8 @@ pipeline { // required - must be on toplevel
         stage("deploy variant 2") {
             steps{
                 script{
-                    env.envToDeploy = input message "Select an envirnoment to deploy to", ok: "Done", parameters: [choice(name: 'envToDeploy', choices: ['DEV', 'STAGING', 'PROD'], description: '')]
-                    echo "Deploying to ${envToDeploy}"
+                    env.envDeploy = input message "Select an environment to deploy to", ok: "Done", parameters: [choice(name: 'envToDeploy', choices: ['DEV', 'STAGING', 'PROD'], description: '')]
+                    echo "Deploying to ${envDeploy}"
                 }
             }
         }
