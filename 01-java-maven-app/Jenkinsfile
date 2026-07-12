@@ -38,6 +38,11 @@ pipeline {
             }
         }
         stage('Build docker image') {
+            when {
+                expression {
+                    BRANCH_NAME == "main"
+                }
+            }
             steps {
                 script {
                     gv.buildImage()
@@ -45,6 +50,11 @@ pipeline {
             }
         }
         stage('Deploy') {
+            when {
+                expression {
+                    BRANCH_NAME == "main"
+                }
+            }
             steps {
                 script {
                     gv.deployApp()
