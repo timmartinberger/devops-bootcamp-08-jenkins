@@ -28,29 +28,19 @@ pipeline {
             }
         }
         stage('Build jar') {
-            when {
-                expression {
-                    BRANCH_NAME == "main"
-                }
-            }
             steps {
                 script {
                     dir('01-java-maven-app') {
-                        buildJar()
+                        buildJar()  // Name of the file containing the buildJar functionality in the shared library
                     }
                 }
             }
         }
         stage('Build docker image') {
-            when {
-                expression {
-                    BRANCH_NAME == "main"
-                }
-            }
             steps {
                 script {
                     dir('01-java-maven-app') {
-                        buildImage()
+                        buildImage()   // Name of the file containing the buildImage functionality in the shared library
                     }
                 }
             }
