@@ -40,7 +40,7 @@ pipeline {
             steps {
                 script {
                     dir('01-java-maven-app') {
-                        buildImage()   // Name of the file containing the buildImage functionality in the shared library
+                        buildImage 'aarontimberg/demo-app:jma-2.1' // Name of the file containing the buildImage functionality in the shared library
                     }
                 }
             }
