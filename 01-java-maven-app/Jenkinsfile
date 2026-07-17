@@ -11,7 +11,7 @@ pipeline {
         stage('init') {
             steps {
                 script {
-                    echo "Executing pipeline for $BRANCH_NAME"
+                    echo "Executing pipeline for $BRANCH_NAME" // NOTE: BRANCH_NAME is only available in multibranch pipelines
                     dir('01-java-maven-app') { // Load from 01-java-maven-app directory
                         gv = load "script.groovy"
                     }
