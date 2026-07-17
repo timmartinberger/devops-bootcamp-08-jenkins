@@ -36,11 +36,13 @@ pipeline {
                 }
             }
         }
-        stage('Build docker image') {
+        stage('Build and push docker image') {
             steps {
                 script {
                     dir('01-java-maven-app') {
-                        buildImage 'aarontimberg/demo-app:jma-2.1' // Name of the file containing the buildImage functionality in the shared library
+                        dockerBuild 'aarontimberg/demo-app:jma-2.1' // Name of the file containing the buildImage functionality in the shared library
+                        dockerLogin()
+                        dockerPush 'aarontimberg/demo-app:jma-2.1'
                     }
                 }
             }
