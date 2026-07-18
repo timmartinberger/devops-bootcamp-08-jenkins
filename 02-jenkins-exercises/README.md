@@ -15,7 +15,7 @@ Configure your application to be built as a Docker image.
 - Dockerize your NodeJS app
 
 ### Solution 1
-
+The resulting Dockerfile can be found [here]().
 
 ### <ins>EXERCISE 2: Create a full pipeline for your Node.js App</ins>
 You want the following steps to be included in your pipeline:
