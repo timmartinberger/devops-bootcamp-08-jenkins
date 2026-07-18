@@ -15,7 +15,7 @@ Configure your application to be built as a Docker image.
 - Dockerize your NodeJS app
 
 ### Solution 1
-The resulting Dockerfile can be found [here]().
+The resulting Dockerfile can be found [here](https://github.com/timmartinberger/devops-bootcamp-08-jenkins/tree/main/02-jenkins-exercises/Dockerfile).
 
 ### <ins>EXERCISE 2: Create a full pipeline for your Node.js App</ins>
 You want the following steps to be included in your pipeline:
@@ -23,15 +23,15 @@ You want the following steps to be included in your pipeline:
 
 The application's version and docker image version should be incremented.
 
-> **Tip**: Ensure to add —no-git-tag-version to the npm version minor command in your Jenkinsfile to avoid any commit errors
+> **Tip**: Ensure to add `—no-git-tag-version` to the npm version minor command in your Jenkinsfile to avoid any commit errors
 
 - Run tests
 
 You want to test the code, to be sure to deploy only working code. When tests fail, the pipeline should abort.
 
-    Build docker image with incremented version
-    Push to Docker repository
-    Commit to Git
+- Build docker image with incremented version
+- Push to Docker repository
+- Commit to Git
 
 The application version increment must be committed and pushed to a remote Git repository.
 

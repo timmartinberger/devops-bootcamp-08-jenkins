@@ -1,0 +1,58 @@
+pipeline {
+    agent any
+
+    stages {
+        stage("Prepare versioning") {
+            steps{
+                script{
+                    dir('02-jenkins-exercises'){
+                        echo "Increment app version"
+                        sh 'npm version minor -git-tag-version false'
+                        def matcher = readFile('app/package.json') =~ '/"version"\s*:\s*"([^"]+)"/'
+                        def version = matcher.group(1)
+                        env.IMAGE_NAME "$version.$BUILD_NUMBER"
+                    }
+                }
+            }
+        }
+        stage("Test app") {
+            steps{
+                script{
+                    dir('02-jenkins-exercises'){
+                        sh "npm install"
+                        sh "npm test"
+                    }
+                }
+            }
+        }
+        stage("Build docker image") {
+            steps {
+                script{
+                    dir('02-jenkins-exercises'){
+                        sh "docker build -t aarontimberg/demo-app:nodeapp-${IMAGE_NAME}"
+                        withCredentials([usernamePassword(credentialsId: 'docker.hub', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                            sh 'echo $PASS | docker login --password-stdin $USER'
+                            sh "docker push aarontimberg/demo-app:nodeapp-${IMAGE_NAME}"
+                        }
+                    }
+                }
+            }
+        }
+        stage("Commit new version to git") {
+            steps {
+                script{
+                    dir('02-jenkins-exercises'){
+                        withCredentials([usernamePassword(credentialsId: '97fe2288-6e06-4306-99ac-4bd45c00ae7a', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                            sh "git remote set-url origin https://${USER}:${PASS}@github.com/timmartinberger/devops-bootcamp-08-jenkins.git"
+                            sh 'git add .'
+                            sh 'git commit -m "ci: version bump"'
+                            sh 'git push origin HEAD:main'
+                        }
+                    }
+                }
+            }
+
+        }
+
+    }
+}
