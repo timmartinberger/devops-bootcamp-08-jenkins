@@ -38,7 +38,7 @@ pipeline {
             steps {
                 script{
                     dir('02-jenkins-exercises'){
-                        def imgName = "nodeapp-${IMAGE_TAG}"
+                        def imgName = "aarontimberg/demo-app:nodeapp-${IMAGE_TAG}"
                         dockerBuild imgName
                         dockerLogin()
                         dockerPush imgName
