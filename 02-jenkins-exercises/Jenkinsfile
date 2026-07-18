@@ -8,7 +8,7 @@ pipeline {
                     dir('02-jenkins-exercises'){
                         echo "Increment app version"
                         sh 'npm version minor -git-tag-version false'
-                        def matcher = readFile('app/package.json') =~ '/"version"\s*:\s*"([^"]+)"/'
+                        def matcher = readFile('app/package.json') =~ /"version"\s*:\s*"([^"]+)"/
                         def version = matcher.group(1)
                         env.IMAGE_NAME "$version.$BUILD_NUMBER"
                     }
