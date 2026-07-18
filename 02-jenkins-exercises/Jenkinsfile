@@ -1,3 +1,12 @@
+#!/user/bin/env groovy
+
+library identifier: "08-jenkins-shared-library@main", retriever: modernSCM([
+    $class: 'GitSCMSource',
+    remote: 'https://github.com/timmartinberger/08-jenkins-shared-library.git',
+    credentialsId: '97fe2288-6e06-4306-99ac-4bd45c00ae7a'])
+
+
+
 pipeline {
     agent any
 
@@ -6,15 +15,12 @@ pipeline {
     }
 
     stages {
+
         stage("Prepare versioning") {
             steps{
                 script{
                     dir('02-jenkins-exercises/app'){
-                        echo "Increment app version"
-                        sh 'npm version minor -git-tag-version false'
-                        def packageJson = readJSON file: 'package.json'
-                        def version = packageJson.version
-                        env.IMAGE_NAME = "$version.$BUILD_NUMBER"
+                        incrementNpmVersion()
                     }
                 }
             }
@@ -23,8 +29,7 @@ pipeline {
             steps{
                 script{
                     dir('02-jenkins-exercises/app'){
-                        sh "npm install"
-                        sh "npm test"
+                        runNpmTest()
                     }
                 }
             }
@@ -33,11 +38,10 @@ pipeline {
             steps {
                 script{
                     dir('02-jenkins-exercises'){
-                        sh "docker build -t aarontimberg/demo-app:nodeapp-${IMAGE_NAME} ."
-                        withCredentials([usernamePassword(credentialsId: 'docker.hub', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-                            sh 'echo $PASS | docker login -u $USER --password-stdin'
-                            sh "docker push aarontimberg/demo-app:nodeapp-${IMAGE_NAME}"
-                        }
+                        def imgName = "nodeapp-${IMAGE_TAG}"
+                        dockerBuild imgName
+                        dockerLogin()
+                        dockerPush imgName
                     }
                 }
             }
@@ -47,13 +51,9 @@ pipeline {
                 script{
                     dir('02-jenkins-exercises'){
                         withCredentials([usernamePassword(credentialsId: '97fe2288-6e06-4306-99ac-4bd45c00ae7a', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-                            sh 'git config --global user.email "jenkins@example.com"'
-                            sh 'git config --global user.name "jenkins"'
-
-                            sh "git remote set-url origin https://${USER}:${PASS}@github.com/timmartinberger/devops-bootcamp-08-jenkins.git"
-                            sh 'git add .'
-                            sh 'git commit -m "ci: version bump"'
-                            sh 'git push origin HEAD:main'
+                            def origin = "https://${USER}:${PASS}@github.com/timmartinberger/devops-bootcamp-08-jenkins.git"
+                            def branch = "main"
+                            gitCommit origin branch
                         }
                     }
                 }
