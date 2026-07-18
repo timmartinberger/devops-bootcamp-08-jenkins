@@ -36,8 +36,12 @@ You want to test the code, to be sure to deploy only working code. When tests fa
 The application version increment must be committed and pushed to a remote Git repository.
 
 ### Solution 2
-
-
+1. To read out the version from the **_package.json_** file install the plugin **Pipeline Utility Steps**.
+2. Create the [Jenkinsfile](https://github.com/timmartinberger/devops-bootcamp-08-jenkins/tree/main/02-jenkins-exercises/Jenkinsfile).
+3. Create a pipeline job in the Jenkins UI. Do the following configuration:
+   1. Check **Triggers → GitHub hook trigger for GITScm polling**. This enables automatic builds for every push to the GitHub repo.
+   2. Set the repo to checkout from GitHub:
+      ![pipeline settings](../assets/img/02-pipeline-settings.png)
 
 ### <ins>EXERCISE 3: Manually deploy new Docker Image on server</ins>
 After the pipeline has run successfully, you:

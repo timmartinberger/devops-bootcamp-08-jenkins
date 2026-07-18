@@ -35,7 +35,7 @@ pipeline {
                     dir('02-jenkins-exercises'){
                         sh "docker build -t aarontimberg/demo-app:nodeapp-${IMAGE_NAME} ."
                         withCredentials([usernamePassword(credentialsId: 'docker.hub', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-                            sh 'echo $PASS | docker login --password-stdin $USER'
+                            sh 'echo $PASS | docker login -u $USER--password-stdin'
                             sh "docker push aarontimberg/demo-app:nodeapp-${IMAGE_NAME}"
                         }
                     }
