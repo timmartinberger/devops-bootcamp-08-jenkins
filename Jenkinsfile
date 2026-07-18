@@ -37,7 +37,7 @@ pipeline { // required - must be on toplevel
         }
         stage("test") {
             when { // Basic condition
-                expression {
+                expression { // This stage is only executed if params.executeTests is true
                     params.executeTests
                 }
             }
