@@ -53,7 +53,7 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: '97fe2288-6e06-4306-99ac-4bd45c00ae7a', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                             def origin = "https://${USER}:${PASS}@github.com/timmartinberger/devops-bootcamp-08-jenkins.git"
                             def branch = "main"
-                            gitCommit origin branch
+                            gitCommit(origin, branch)
                         }
                     }
                 }
