@@ -35,7 +35,7 @@ pipeline {
                 }
             }
         }
-        stage("Build docker image") {
+        stage("Build and push docker image") {
             steps {
                 script{
                     dir('02-jenkins-exercises'){

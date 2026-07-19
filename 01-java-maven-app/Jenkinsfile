@@ -8,7 +8,7 @@ pipeline {
     }
 
     stages {
-        stage('init') {
+        stage('Init') {
             steps {
                 script {
                     echo "Executing pipeline for $BRANCH_NAME" // NOTE: BRANCH_NAME is only available in multibranch pipelines
@@ -27,7 +27,7 @@ pipeline {
                 }
             }
         }
-        stage('test') {
+        stage('Test') {
             steps {
                 script {
                     dir('01-java-maven-app') {
@@ -45,7 +45,7 @@ pipeline {
                 }
             }
         }
-        stage('Build docker image') {
+        stage('Build and push docker image') {
             steps {
                 script {
                     dir('01-java-maven-app') {
