@@ -1,5 +1,6 @@
 #!/user/bin/env groovy
 
+// Import shared library
 library identifier: "08-jenkins-shared-library@main", retriever: modernSCM([
     $class: 'GitSCMSource',
     remote: 'https://github.com/timmartinberger/08-jenkins-shared-library.git',
@@ -10,7 +11,7 @@ library identifier: "08-jenkins-shared-library@main", retriever: modernSCM([
 pipeline {
     agent any
 
-    tools {
+    tools { // Node is used in stage "Test app", so it has to be imported
         nodejs 'nodejs-24.16.0'
     }
 
@@ -39,9 +40,9 @@ pipeline {
                 script{
                     dir('02-jenkins-exercises'){
                         def imgName = "aarontimberg/demo-app:nodeapp-${IMAGE_TAG}"
-                        dockerBuild imgName
+                        dockerBuild(imgName)
                         dockerLogin()
-                        dockerPush imgName
+                        dockerPush(imgName)
                     }
                 }
             }

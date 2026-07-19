@@ -42,6 +42,8 @@ The application version increment must be committed and pushed to a remote Git r
    1. Check **Triggers → GitHub hook trigger for GITScm polling**. This enables automatic builds for every push to the GitHub repo.
    2. Set the repo to checkout from GitHub:
       ![Pipeline settings](../assets/img/02-pipeline-settings.png)
+4. At **Jenkins verwalten → Tools** a Node.js installation was added and called **nodejs-24.16.0** to be imported at
+   the top of the pipeline.
 
 Now, my pipeline executes without any errors due to configuration:
 ![Pipeline execution](../assets/img/02-pipeline-execution.png)
